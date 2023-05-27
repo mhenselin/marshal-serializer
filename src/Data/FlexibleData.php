@@ -4,17 +4,19 @@ declare(strict_types = 1);
 
 namespace KingsonDe\Marshal\Data;
 
+use OutOfBoundsException;
+
 class FlexibleData implements DataStructure, \ArrayAccess, \Iterator {
 
     /**
      * @var array
      */
-    private $data;
+    private array $data;
 
     /**
      * @var int
      */
-    private $position = 0;
+    private int $position = 0;
 
     public function __construct(array $data = []) {
         $this->data = $data;
@@ -23,29 +25,32 @@ class FlexibleData implements DataStructure, \ArrayAccess, \Iterator {
     /**
      * @inheritdoc
      */
-    public function build() {
+    public function build(): ?array
+    {
         return $this->data;
     }
 
     /**
-     * @param string|int $key
+     * @param int|string $key
      * @return mixed
-     * @throws \OutOfBoundsException
+     * @throws OutOfBoundsException
      */
-    public function get($key) {
+    public function get(int|string $key): mixed
+    {
         if (!array_key_exists($key, $this->data)) {
-            throw new \OutOfBoundsException("No value set for $key.");
+            throw new OutOfBoundsException("No value set for $key.");
         }
 
         return $this->find($key);
     }
 
     /**
-     * @param string|int $key
-     * @param mixed $defaultValue
+     * @param int|string $key
+     * @param mixed|null $defaultValue
      * @return mixed
      */
-    public function find($key, $defaultValue = null) {
+    public function find(int|string $key, mixed $defaultValue = null): mixed
+    {
         if (!array_key_exists($key, $this->data)) {
             return $defaultValue;
         }
@@ -64,63 +69,63 @@ class FlexibleData implements DataStructure, \ArrayAccess, \Iterator {
     /**
      * @inheritdoc
      */
-    public function offsetExists($offset) {
+    public function offsetExists($offset): bool {
         return isset($this->data[$offset]);
     }
 
     /**
      * @inheritdoc
      */
-    public function &offsetGet($offset) {
+    public function &offsetGet($offset): mixed {
         return $this->data[$offset];
     }
 
     /**
      * @inheritdoc
      */
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value): void {
         $this->data[$offset] = $value;
     }
 
     /**
      * @inheritdoc
      */
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset): void {
         unset($this->data[$offset]);
     }
 
     /**
      * @inheritdoc
      */
-    public function current() {
+    public function current(): mixed {
         return new FlexibleData($this->data[$this->position]);
     }
 
     /**
      * @inheritdoc
      */
-    public function next() {
+    public function next(): void {
         ++$this->position;
     }
 
     /**
      * @inheritdoc
      */
-    public function key() {
+    public function key(): mixed {
         return $this->position;
     }
 
     /**
      * @inheritdoc
      */
-    public function valid() {
+    public function valid(): bool {
         return isset($this->data[$this->position]);
     }
 
     /**
      * @inheritdoc
      */
-    public function rewind() {
+    public function rewind(): void {
         $this->position = 0;
     }
 }

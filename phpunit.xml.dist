@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         cacheTokens="true"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         forceCoversAnnotation="false"
-         mapTestClassNameToCoveredClassName="false"
          processIsolation="false"
          stopOnError="false"
          stopOnFailure="false"
          stopOnIncomplete="false"
          stopOnSkipped="false"
-         verbose="true"
-         coverage-clover="clover.xml"
          beStrictAboutTestsThatDoNotTestAnything="false">
 
     <php>
@@ -28,17 +19,23 @@
         <ini name="memory_limit" value="-1"/>
     </php>
 
-    <logging>
-        <log type="coverage-html" target="./build/clover-html" charset="UTF-8" yui="true" highlight="true" lowUpperBound="35" highLowerBound="70"/>
-        <log type="coverage-clover" target="./build/clover.xml"/>
-        <log type="junit" target="./build/junit.xml" logIncompleteSkipped="false"/>
-        <log type="testdox-html" target="./build/testdox.html"/>
-        <log type="testdox-text" target="./build/testdox.txt"/>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="true" showOnlySummary="true"/>
-    </logging>
+    <coverage includeUncoveredFiles="true"
+              pathCoverage="false"
+              ignoreDeprecatedCodeUnits="true"
+              disableCodeCoverageIgnore="true">
+        <report>
+            <clover outputFile="./build/clover.xml"/>
+            <cobertura outputFile="./build/cobertura.xml"/>
+            <crap4j outputFile="./build/crap4j.xml" threshold="50"/>
+            <html outputDirectory="./build/clover-html" lowUpperBound="50" highLowerBound="90"/>
+            <php outputFile="./build/coverage.php"/>
+            <text outputFile="./build/coverage.txt" showUncoveredFiles="false" showOnlySummary="true"/>
+            <xml outputDirectory="./build/xml-coverage"/>
+        </report>
+    </coverage>
 
     <testsuites>
-        <testsuite>
+        <testsuite name="default">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

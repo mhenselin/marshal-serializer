@@ -16,7 +16,7 @@ class FlexibleDataTest extends TestCase {
      */
     private $flexibleData;
 
-    protected function setUp() {
+    protected function setUp(): void {
         $data = [
             'users' => [
                 [
@@ -64,10 +64,8 @@ class FlexibleDataTest extends TestCase {
         $this->assertInstanceOf(\stdClass::class, $this->flexibleData->get('custom'));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testGetMethodWithInvalidKey() {
+        $this->expectException(\OutOfBoundsException::class);
         $this->flexibleData->get('nothing');
     }
 

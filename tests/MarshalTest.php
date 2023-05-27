@@ -150,6 +150,7 @@ class MarshalTest extends TestCase {
         $this->assertSame($data, Marshal::serialize($flexibleData));
     }
 
+
     public function testDeserialize() {
         $data = Marshal::serializeItem(new ProfileMapper(), $this->createProfile());
 
